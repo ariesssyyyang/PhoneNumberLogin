@@ -7,4 +7,5 @@ target 'PhoneNumberLogin' do
 
   # Pods for PhoneNumberLogin
   pod 'Firebase/Core'
+  pod 'Firebase/Auth'
 end

@@ -73,6 +73,14 @@ class LoginViewController: UIViewController {
         return button
     }()
 
+    let loadingView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .gray)
+        view.hidesWhenStopped = true
+        view.stopAnimating()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -122,6 +130,12 @@ class LoginViewController: UIViewController {
         signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor).isActive = true
         signInButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         signInButton.widthAnchor.constraint(equalTo: baseView.widthAnchor, multiplier: 0.5).isActive = true
+
+        baseView.addSubview(loadingView)
+        loadingView.centerXAnchor.constraint(equalTo: verifyPhoneNumberButton.centerXAnchor).isActive = true
+        loadingView.centerYAnchor.constraint(equalTo: verifyPhoneNumberButton.centerYAnchor).isActive = true
+        loadingView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        loadingView.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
 }
 
@@ -145,10 +159,13 @@ extension LoginViewController {
 
         let phoneNumWithCountryCode = Util.addCountryCode(phoneNumber: phoneNumber)
         resignTextFields()
+        loadingView.startAnimating()
         LoginManager.sendVerificationCode(phoneNumber: phoneNumWithCountryCode) { [weak self] (result) in
+            self?.loadingView.stopAnimating()
             switch result {
             case .success(let verificationID):
                 UserDefaults.standard.set(verificationID, forKey: "authVerificationId")
+                self?.verificationCodeTextField.becomeFirstResponder()
             case .failure(let error):
                 self?.showFailAlert(message: error.localizedDescription)
             }
@@ -156,6 +173,11 @@ extension LoginViewController {
     }
     
     @objc func signIn() {
+        guard let phoneNumber = phoneNumTextField.text, !phoneNumber.isEmpty else {
+            showFailAlert(message: "Please enter your phone number.")
+            return
+        }
+
         guard let verificationCode = verificationCodeTextField.text, !verificationCode.isEmpty else {
             showFailAlert(message: "Please enter the verification code.")
             return
@@ -186,7 +208,7 @@ extension LoginViewController {
     }
 
     func showSuccessAlert(message: String?) {
-        let alert = UIAlertController(title: "CALL U MAYBE", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "CALL U MAYBE 😉", message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             let welcomePage = WelcomeViewController()
             self?.present(welcomePage, animated: true, completion: nil)

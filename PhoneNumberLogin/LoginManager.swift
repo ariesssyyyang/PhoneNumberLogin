@@ -11,7 +11,7 @@ import FirebaseAuth
 
 class LoginManager {
 
-    func sendVerificationCode(phoneNumber: String, completion: @escaping (Result<String>) -> Void) {
+    static func sendVerificationCode(phoneNumber: String, completion: @escaping (Result<String>) -> Void) {
         PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { (verificationID, error) in
             if let error = error {
                 completion(.failure(error))
@@ -23,11 +23,11 @@ class LoginManager {
         }
     }
 
-    func getCredential(with verificationCode: String, verificationID: String) -> AuthCredential {
+    static func getCredential(with verificationCode: String, verificationID: String) -> AuthCredential {
         return PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: verificationCode)
     }
 
-    func signInUser(with credential: AuthCredential, completion: @escaping (Result<User>) -> Void) {
+    static func signInUser(with credential: AuthCredential, completion: @escaping (Result<User>) -> Void) {
         Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
             if let error = error {
                 completion(.failure(error))

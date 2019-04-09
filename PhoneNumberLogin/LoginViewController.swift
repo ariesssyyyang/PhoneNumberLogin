@@ -76,6 +76,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         setupTextField()
         setupLayout()
+        setupButton()
     }
 
     func setupLayout() {
@@ -120,6 +121,60 @@ class LoginViewController: UIViewController {
         signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -20).isActive = true
         signInButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         signInButton.widthAnchor.constraint(equalTo: baseView.widthAnchor, multiplier: 0.5).isActive = true
+    }
+}
+
+extension LoginViewController {
+
+    func setupButton() {
+        verifyPhoneNumberButton.addTarget(self, action: #selector(sendVerificationCode), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+    }
+
+    @objc func sendVerificationCode() {
+        guard let phoneNumber = phoneNumTextField.text else {
+            return
+        }
+        
+        let nonSpacePhoneNum = phoneNumber.trimmingCharacters(in: CharacterSet(charactersIn: " "))
+        guard !nonSpacePhoneNum.isEmpty, nonSpacePhoneNum.count == 10 else {
+            return
+        }
+
+        let phoneNumWithCountryCode = Util.addCountryCode(phoneNumber: nonSpacePhoneNum)
+        LoginManager.sendVerificationCode(phoneNumber: phoneNumWithCountryCode) { (result) in
+            switch result {
+            case .success(let verificationID):
+                UserDefaults.standard.set(verificationID, forKey: "authVerificationId")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    @objc func signIn() {
+        guard let verificationCode = verificationCodeTextField.text else {
+            return
+        }
+
+        guard let verificationID = UserDefaults.standard.string(forKey: "authVerificationId") else {
+            return
+        }
+        
+        let nonSpaceVerificationCode = verificationCode.trimmingCharacters(in: CharacterSet(charactersIn: " "))
+        guard !nonSpaceVerificationCode.isEmpty else {
+            return
+        }
+        
+        let credential = LoginManager.getCredential(with: nonSpaceVerificationCode, verificationID: verificationID)
+        LoginManager.signInUser(with: credential) { (result) in
+            switch result {
+            case .success(let user):
+                print(user)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 

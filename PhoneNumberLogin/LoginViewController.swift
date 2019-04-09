@@ -91,7 +91,7 @@ class LoginViewController: UIViewController {
         phoneNumberLabel.leftAnchor.constraint(equalTo: baseView.leftAnchor).isActive = true
         phoneNumberLabel.rightAnchor.constraint(equalTo: baseView.centerXAnchor).isActive = true
         phoneNumberLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        phoneNumberLabel.topAnchor.constraint(equalTo: baseView.topAnchor, constant: 20).isActive = true
+        phoneNumberLabel.topAnchor.constraint(equalTo: baseView.topAnchor).isActive = true
 
         baseView.addSubview(phoneNumTextField)
         phoneNumTextField.leftAnchor.constraint(equalTo: phoneNumberLabel.leftAnchor).isActive = true
@@ -101,7 +101,7 @@ class LoginViewController: UIViewController {
 
         baseView.addSubview(verifyPhoneNumberButton)
         verifyPhoneNumberButton.leftAnchor.constraint(equalTo: phoneNumTextField.leftAnchor, constant: 5).isActive = true
-        verifyPhoneNumberButton.rightAnchor.constraint(equalTo: baseView.centerXAnchor, constant: -5).isActive = true
+        verifyPhoneNumberButton.rightAnchor.constraint(equalTo: baseView.centerXAnchor, constant: 10).isActive = true
         verifyPhoneNumberButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         verifyPhoneNumberButton.topAnchor.constraint(equalTo: phoneNumTextField.bottomAnchor, constant: 10).isActive = true
 
@@ -119,7 +119,7 @@ class LoginViewController: UIViewController {
 
         baseView.addSubview(signInButton)
         signInButton.centerXAnchor.constraint(equalTo: baseView.centerXAnchor).isActive = true
-        signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -20).isActive = true
+        signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor).isActive = true
         signInButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         signInButton.widthAnchor.constraint(equalTo: baseView.widthAnchor, multiplier: 0.5).isActive = true
     }

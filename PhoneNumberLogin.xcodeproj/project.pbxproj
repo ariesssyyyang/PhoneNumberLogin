@@ -13,6 +13,8 @@
 		7FB7F1C3225BBBD1008185AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7FB7F1C2225BBBD1008185AF /* Assets.xcassets */; };
 		7FB7F1C6225BBBD1008185AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FB7F1C4225BBBD1008185AF /* LaunchScreen.storyboard */; };
 		7FB7F1CE225BC7F7008185AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7FB7F1CD225BC7F7008185AF /* GoogleService-Info.plist */; };
+		7FB7F1D1225C760F008185AF /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB7F1D0225C760F008185AF /* LoginManager.swift */; };
+		7FB7F1D3225C77D1008185AF /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB7F1D2225C77D1008185AF /* Util.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		7FB7F1C7225BBBD1008185AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7FB7F1CD225BC7F7008185AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7FB7F1CF225C4EE2008185AF /* PhoneNumberLogin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhoneNumberLogin.entitlements; sourceTree = "<group>"; };
+		7FB7F1D0225C760F008185AF /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		7FB7F1D2225C77D1008185AF /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		C23A86F82C2D78A3A1DD716D /* Pods-PhoneNumberLogin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhoneNumberLogin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhoneNumberLogin/Pods-PhoneNumberLogin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,6 +76,8 @@
 			children = (
 				7FB7F1CF225C4EE2008185AF /* PhoneNumberLogin.entitlements */,
 				7FB7F1BB225BBBD0008185AF /* AppDelegate.swift */,
+				7FB7F1D0225C760F008185AF /* LoginManager.swift */,
+				7FB7F1D2225C77D1008185AF /* Util.swift */,
 				7FB7F1BD225BBBD0008185AF /* ViewController.swift */,
 				7FB7F1C2225BBBD1008185AF /* Assets.xcassets */,
 				7FB7F1C4225BBBD1008185AF /* LaunchScreen.storyboard */,
@@ -213,6 +219,8 @@
 			files = (
 				7FB7F1BE225BBBD0008185AF /* ViewController.swift in Sources */,
 				7FB7F1BC225BBBD0008185AF /* AppDelegate.swift in Sources */,
+				7FB7F1D1225C760F008185AF /* LoginManager.swift in Sources */,
+				7FB7F1D3225C77D1008185AF /* Util.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

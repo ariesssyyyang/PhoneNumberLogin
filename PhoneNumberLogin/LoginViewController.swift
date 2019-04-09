@@ -74,6 +74,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setupTextField()
         setupLayout()
     }
 
@@ -119,5 +120,18 @@ class LoginViewController: UIViewController {
         signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -20).isActive = true
         signInButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         signInButton.widthAnchor.constraint(equalTo: baseView.widthAnchor, multiplier: 0.5).isActive = true
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+
+    func setupTextField() {
+        phoneNumTextField.delegate = self
+        verificationCodeTextField.delegate = self
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

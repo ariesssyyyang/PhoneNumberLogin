@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		44827EFD7E47FDEBB3ADF88A /* Pods_PhoneNumberLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D128118E2034DE9DEF0464 /* Pods_PhoneNumberLogin.framework */; };
 		7FB7F1BC225BBBD0008185AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB7F1BB225BBBD0008185AF /* AppDelegate.swift */; };
-		7FB7F1BE225BBBD0008185AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB7F1BD225BBBD0008185AF /* ViewController.swift */; };
+		7FB7F1BE225BBBD0008185AF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB7F1BD225BBBD0008185AF /* LoginViewController.swift */; };
 		7FB7F1C3225BBBD1008185AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7FB7F1C2225BBBD1008185AF /* Assets.xcassets */; };
 		7FB7F1C6225BBBD1008185AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FB7F1C4225BBBD1008185AF /* LaunchScreen.storyboard */; };
 		7FB7F1CE225BC7F7008185AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7FB7F1CD225BC7F7008185AF /* GoogleService-Info.plist */; };
@@ -22,7 +22,7 @@
 		35ED2C99F74281B1F096F2E9 /* Pods-PhoneNumberLogin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhoneNumberLogin.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhoneNumberLogin/Pods-PhoneNumberLogin.release.xcconfig"; sourceTree = "<group>"; };
 		7FB7F1B8225BBBD0008185AF /* PhoneNumberLogin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhoneNumberLogin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB7F1BB225BBBD0008185AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7FB7F1BD225BBBD0008185AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7FB7F1BD225BBBD0008185AF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7FB7F1C2225BBBD1008185AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7FB7F1C5225BBBD1008185AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7FB7F1C7225BBBD1008185AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 				7FB7F1BB225BBBD0008185AF /* AppDelegate.swift */,
 				7FB7F1D0225C760F008185AF /* LoginManager.swift */,
 				7FB7F1D2225C77D1008185AF /* Util.swift */,
-				7FB7F1BD225BBBD0008185AF /* ViewController.swift */,
+				7FB7F1BD225BBBD0008185AF /* LoginViewController.swift */,
 				7FB7F1C2225BBBD1008185AF /* Assets.xcassets */,
 				7FB7F1C4225BBBD1008185AF /* LaunchScreen.storyboard */,
 				7FB7F1C7225BBBD1008185AF /* Info.plist */,
@@ -217,7 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FB7F1BE225BBBD0008185AF /* ViewController.swift in Sources */,
+				7FB7F1BE225BBBD0008185AF /* LoginViewController.swift in Sources */,
 				7FB7F1BC225BBBD0008185AF /* AppDelegate.swift in Sources */,
 				7FB7F1D1225C760F008185AF /* LoginManager.swift in Sources */,
 				7FB7F1D3225C77D1008185AF /* Util.swift in Sources */,

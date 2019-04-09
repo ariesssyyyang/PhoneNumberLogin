@@ -16,3 +16,9 @@ enum Result<T> {
     case success(T)
     case failure(Error)
 }
+
+struct Util {
+    static func addCountryCode(phoneNumber: String) -> String {
+        return phoneNumber.replacingOccurrences(of: "0", with: "+886", options: .literal, range: phoneNumber.startIndex..<phoneNumber.index(after: phoneNumber.startIndex))
+    }
+}

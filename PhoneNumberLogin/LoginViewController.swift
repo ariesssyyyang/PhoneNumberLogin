@@ -25,8 +25,9 @@ class LoginViewController: UIViewController {
 
     let phoneNumTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Enter your phone number"
+        textField.placeholder = "ex: 0987654321"
         textField.font = UIFont.systemFont(ofSize: 14)
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -53,9 +54,10 @@ class LoginViewController: UIViewController {
 
     let verificationCodeTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Enter the code from SMS message"
+        textField.placeholder = "ex: 000000"
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.textContentType = .oneTimeCode
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -71,11 +73,19 @@ class LoginViewController: UIViewController {
         return button
     }()
 
+    let loadingView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .gray)
+        view.hidesWhenStopped = true
+        view.stopAnimating()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupTextField()
         setupLayout()
+        setupButton()
     }
 
     func setupLayout() {
@@ -89,7 +99,7 @@ class LoginViewController: UIViewController {
         phoneNumberLabel.leftAnchor.constraint(equalTo: baseView.leftAnchor).isActive = true
         phoneNumberLabel.rightAnchor.constraint(equalTo: baseView.centerXAnchor).isActive = true
         phoneNumberLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        phoneNumberLabel.topAnchor.constraint(equalTo: baseView.topAnchor, constant: 20).isActive = true
+        phoneNumberLabel.topAnchor.constraint(equalTo: baseView.topAnchor).isActive = true
 
         baseView.addSubview(phoneNumTextField)
         phoneNumTextField.leftAnchor.constraint(equalTo: phoneNumberLabel.leftAnchor).isActive = true
@@ -99,7 +109,7 @@ class LoginViewController: UIViewController {
 
         baseView.addSubview(verifyPhoneNumberButton)
         verifyPhoneNumberButton.leftAnchor.constraint(equalTo: phoneNumTextField.leftAnchor, constant: 5).isActive = true
-        verifyPhoneNumberButton.rightAnchor.constraint(equalTo: baseView.centerXAnchor, constant: -5).isActive = true
+        verifyPhoneNumberButton.rightAnchor.constraint(equalTo: baseView.centerXAnchor, constant: 10).isActive = true
         verifyPhoneNumberButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         verifyPhoneNumberButton.topAnchor.constraint(equalTo: phoneNumTextField.bottomAnchor, constant: 10).isActive = true
 
@@ -117,21 +127,101 @@ class LoginViewController: UIViewController {
 
         baseView.addSubview(signInButton)
         signInButton.centerXAnchor.constraint(equalTo: baseView.centerXAnchor).isActive = true
-        signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -20).isActive = true
+        signInButton.bottomAnchor.constraint(equalTo: baseView.bottomAnchor).isActive = true
         signInButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         signInButton.widthAnchor.constraint(equalTo: baseView.widthAnchor, multiplier: 0.5).isActive = true
+
+        baseView.addSubview(loadingView)
+        loadingView.centerXAnchor.constraint(equalTo: verifyPhoneNumberButton.centerXAnchor).isActive = true
+        loadingView.centerYAnchor.constraint(equalTo: verifyPhoneNumberButton.centerYAnchor).isActive = true
+        loadingView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        loadingView.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
 }
 
-extension LoginViewController: UITextFieldDelegate {
+extension LoginViewController {
 
-    func setupTextField() {
-        phoneNumTextField.delegate = self
-        verificationCodeTextField.delegate = self
+    func setupButton() {
+        verifyPhoneNumberButton.addTarget(self, action: #selector(sendVerificationCode), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+    @objc func sendVerificationCode() {
+        guard let phoneNumber = phoneNumTextField.text, !phoneNumber.isEmpty else {
+            showFailAlert(message: "Please enter your phone number.")
+            return
+        }
+        
+        guard phoneNumber.count == 10 else {
+            showFailAlert(message: "Please enter entire phone number (include prefix 0).")
+            return
+        }
+
+        let phoneNumWithCountryCode = Util.addCountryCode(phoneNumber: phoneNumber)
+        resignTextFields()
+        loadingView.startAnimating()
+        LoginManager.sendVerificationCode(phoneNumber: phoneNumWithCountryCode) { [weak self] (result) in
+            self?.loadingView.stopAnimating()
+            switch result {
+            case .success(let verificationID):
+                UserDefaults.standard.set(verificationID, forKey: "authVerificationId")
+                self?.verificationCodeTextField.becomeFirstResponder()
+            case .failure(let error):
+                self?.showFailAlert(message: error.localizedDescription)
+            }
+        }
+    }
+    
+    @objc func signIn() {
+        guard let phoneNumber = phoneNumTextField.text, !phoneNumber.isEmpty else {
+            showFailAlert(message: "Please enter your phone number.")
+            return
+        }
+
+        guard let verificationCode = verificationCodeTextField.text, !verificationCode.isEmpty else {
+            showFailAlert(message: "Please enter the verification code.")
+            return
+        }
+
+        guard let verificationID = UserDefaults.standard.string(forKey: "authVerificationId") else {
+            showFailAlert(message: "Please wait for the verification code from SMS message.")
+            return
+        }
+        
+        let credential = LoginManager.getCredential(with: verificationCode, verificationID: verificationID)
+        LoginManager.signInUser(with: credential) { [weak self] (result) in
+            switch result {
+            case .success(let user):
+                self?.resignTextFields()
+                self?.showSuccessAlert(message: user.phoneNumber)
+            case .failure(let error):
+                self?.showFailAlert(message: error.localizedDescription)
+            }
+        }
+    }
+
+    func showFailAlert(message: String) {
+        let alert = UIAlertController(title: "ERROR", message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true)
+    }
+
+    func showSuccessAlert(message: String?) {
+        let alert = UIAlertController(title: "CALL U MAYBE 😉", message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            let welcomePage = WelcomeViewController()
+            self?.present(welcomePage, animated: true, completion: nil)
+        }
+        alert.addAction(ok)
+        self.present(alert, animated: true) { [weak self] in
+            self?.phoneNumTextField.text?.removeAll()
+            self?.verificationCodeTextField.text?.removeAll()
+        }
+    }
+
+    func resignTextFields() {
+        phoneNumTextField.resignFirstResponder()
+        verificationCodeTextField.resignFirstResponder()
     }
 }

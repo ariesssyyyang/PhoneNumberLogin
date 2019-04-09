@@ -25,6 +25,7 @@
 		7FB7F1C5225BBBD1008185AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7FB7F1C7225BBBD1008185AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7FB7F1CD225BC7F7008185AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7FB7F1CF225C4EE2008185AF /* PhoneNumberLogin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhoneNumberLogin.entitlements; sourceTree = "<group>"; };
 		C23A86F82C2D78A3A1DD716D /* Pods-PhoneNumberLogin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhoneNumberLogin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhoneNumberLogin/Pods-PhoneNumberLogin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,6 +70,7 @@
 		7FB7F1BA225BBBD0008185AF /* PhoneNumberLogin */ = {
 			isa = PBXGroup;
 			children = (
+				7FB7F1CF225C4EE2008185AF /* PhoneNumberLogin.entitlements */,
 				7FB7F1BB225BBBD0008185AF /* AppDelegate.swift */,
 				7FB7F1BD225BBBD0008185AF /* ViewController.swift */,
 				7FB7F1C2225BBBD1008185AF /* Assets.xcassets */,
@@ -122,6 +124,11 @@
 				TargetAttributes = {
 					7FB7F1B7225BBBD0008185AF = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -344,10 +351,14 @@
 			baseConfigurationReference = C23A86F82C2D78A3A1DD716D /* Pods-PhoneNumberLogin.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PhoneNumberLogin/PhoneNumberLogin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3VX9S93JFQ;
 				INFOPLIST_FILE = PhoneNumberLogin/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.aysoft.PhoneNumberLogin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -360,10 +371,14 @@
 			baseConfigurationReference = 35ED2C99F74281B1F096F2E9 /* Pods-PhoneNumberLogin.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PhoneNumberLogin/PhoneNumberLogin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3VX9S93JFQ;
 				INFOPLIST_FILE = PhoneNumberLogin/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.aysoft.PhoneNumberLogin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;

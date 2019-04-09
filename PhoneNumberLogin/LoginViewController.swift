@@ -25,7 +25,7 @@ class LoginViewController: UIViewController {
 
     let phoneNumTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Enter your phone number"
+        textField.placeholder = "ex: 0987654321"
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -53,7 +53,7 @@ class LoginViewController: UIViewController {
 
     let verificationCodeTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Enter the code from SMS message"
+        textField.placeholder = "ex: 000000"
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.textContentType = .oneTimeCode
         textField.translatesAutoresizingMaskIntoConstraints = false

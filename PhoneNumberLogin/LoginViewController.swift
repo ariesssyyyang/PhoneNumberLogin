@@ -27,6 +27,7 @@ class LoginViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = "ex: 0987654321"
         textField.font = UIFont.systemFont(ofSize: 14)
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -56,6 +57,7 @@ class LoginViewController: UIViewController {
         textField.placeholder = "ex: 000000"
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.textContentType = .oneTimeCode
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -74,7 +76,6 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupTextField()
         setupLayout()
         setupButton()
     }
@@ -132,61 +133,73 @@ extension LoginViewController {
     }
 
     @objc func sendVerificationCode() {
-        guard let phoneNumber = phoneNumTextField.text else {
+        guard let phoneNumber = phoneNumTextField.text, !phoneNumber.isEmpty else {
+            showFailAlert(message: "Please enter your phone number.")
             return
         }
         
-        let nonSpacePhoneNum = phoneNumber.trimmingCharacters(in: CharacterSet(charactersIn: " "))
-        guard !nonSpacePhoneNum.isEmpty, nonSpacePhoneNum.count == 10 else {
+        guard phoneNumber.count == 10 else {
+            showFailAlert(message: "Please enter entire phone number (include prefix 0).")
             return
         }
 
-        let phoneNumWithCountryCode = Util.addCountryCode(phoneNumber: nonSpacePhoneNum)
-        LoginManager.sendVerificationCode(phoneNumber: phoneNumWithCountryCode) { (result) in
+        let phoneNumWithCountryCode = Util.addCountryCode(phoneNumber: phoneNumber)
+        resignTextFields()
+        LoginManager.sendVerificationCode(phoneNumber: phoneNumWithCountryCode) { [weak self] (result) in
             switch result {
             case .success(let verificationID):
                 UserDefaults.standard.set(verificationID, forKey: "authVerificationId")
             case .failure(let error):
-                print(error.localizedDescription)
+                self?.showFailAlert(message: error.localizedDescription)
             }
         }
     }
     
     @objc func signIn() {
-        guard let verificationCode = verificationCodeTextField.text else {
+        guard let verificationCode = verificationCodeTextField.text, !verificationCode.isEmpty else {
+            showFailAlert(message: "Please enter the verification code.")
             return
         }
 
         guard let verificationID = UserDefaults.standard.string(forKey: "authVerificationId") else {
+            showFailAlert(message: "Please wait for the verification code from SMS message.")
             return
         }
         
-        let nonSpaceVerificationCode = verificationCode.trimmingCharacters(in: CharacterSet(charactersIn: " "))
-        guard !nonSpaceVerificationCode.isEmpty else {
-            return
-        }
-        
-        let credential = LoginManager.getCredential(with: nonSpaceVerificationCode, verificationID: verificationID)
-        LoginManager.signInUser(with: credential) { (result) in
+        let credential = LoginManager.getCredential(with: verificationCode, verificationID: verificationID)
+        LoginManager.signInUser(with: credential) { [weak self] (result) in
             switch result {
             case .success(let user):
-                print(user)
+                self?.resignTextFields()
+                self?.showSuccessAlert(message: user.phoneNumber)
             case .failure(let error):
-                print(error.localizedDescription)
+                self?.showFailAlert(message: error.localizedDescription)
             }
         }
     }
-}
 
-extension LoginViewController: UITextFieldDelegate {
-
-    func setupTextField() {
-        phoneNumTextField.delegate = self
-        verificationCodeTextField.delegate = self
+    func showFailAlert(message: String) {
+        let alert = UIAlertController(title: "ERROR", message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true)
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+    func showSuccessAlert(message: String?) {
+        let alert = UIAlertController(title: "CALL U MAYBE", message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            let welcomePage = WelcomeViewController()
+            self?.present(welcomePage, animated: true, completion: nil)
+        }
+        alert.addAction(ok)
+        self.present(alert, animated: true) { [weak self] in
+            self?.phoneNumTextField.text?.removeAll()
+            self?.verificationCodeTextField.text?.removeAll()
+        }
+    }
+
+    func resignTextFields() {
+        phoneNumTextField.resignFirstResponder()
+        verificationCodeTextField.resignFirstResponder()
     }
 }

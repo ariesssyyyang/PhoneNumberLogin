@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+enum LoginError: String, Error {
+    case unknown = "WTF, unkonwn error."
+}
+
+enum Result<T> {
+    case success(T)
+    case failure(Error)
+}

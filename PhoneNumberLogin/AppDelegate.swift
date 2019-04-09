@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = ViewController() // FIXME: Replace with REAL root VC
+        window.rootViewController = LoginViewController()
         window.makeKeyAndVisible()
         self.window = window
 
